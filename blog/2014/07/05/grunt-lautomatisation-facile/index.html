@@ -1,0 +1,441 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Grunt: l'automatisation facile - Blog</title>
+  <meta name="author" content="Jean-Thierry BONHOMME">
+
+  
+  <meta name="description" content="La majorité des développeurs que je connais ont un point commun, une caractéristique qui les distinguent des autres professions. Ils sont paresseux &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://jtbonhomme.github.io/blog/2014/07/05/grunt-lautomatisation-facile">
+  <link href="/favicon.ico" rel="icon">
+  
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="/javascripts/ender.js"></script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <link href="/atom.xml" rel="alternate" title="Blog" type="application/atom+xml">
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+
+</head>
+
+<body   class="no-sidebar"  >
+  <header role="banner"><hgroup>
+  <h1>Blog</h1>
+  
+    <h2><a href="/">JTB's</a></h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation">
+  
+<form action="https://www.google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:jtbonhomme.github.io" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/blog/archives">Archives</a></li>
+  <li><a href="https://github.com/jtbonhomme">Github</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">Grunt: L'automatisation Facile</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-07-05T11:03:24+02:00" pubdate data-updated="true">Jul 5<sup>th</sup>, 2014</time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p><img src="http://gruntjs.com/img/grunt-logo.svg" alt="" /></p>
+
+<p>La majorité des développeurs que je connais ont un point commun, une caractéristique qui les distinguent des autres professions.</p>
+
+<p>Ils sont paresseux.</p>
+
+<p>Loin d&#8217;être un défaut, cette paresse est encouragée car elle se traduit pas une tendance à éviter les tâches répétitives et fasitidieuses, et libèrent du temps pour les activités plus productives (écriture de documentation et test &hellip; quoique &hellip;)</p>
+
+<p>Les outils qui permettent au développeur consciencieux d&#8217;en faire le moins possible foisonnent; générateurs de templates et boilerplates, snippets, gist et autres pastebin, et outils d&#8217;automatisation.</p>
+
+<p>c&#8217;est à cette dernière catégorie que nous allons nous intéresser et plus particulièrement au plus célèbre d&#8217;entre eux: <a href="http://gruntjs.com/">grunt</a>.</p>
+
+<h1>A quoi ça sert ?</h1>
+
+<p>Grunt est un exécuteur de tâches qui peuvent être lancées unitairement, ou par groupes.</p>
+
+<p>Pour parler concrêtement, le travail quotidien d&#8217;un dev front consiste quasi continuellement à :
+* développer ou modifier son code (ou celui du voisin)
+* corriger les fautes de syntaxes qui ne correspondent pas aux règles de codage
+* vider les répertoires de sortie où sont compilés mes fichiers
+* compiler ses templates pour générer les fichiers html
+* compiler et minifier ses fichiers html
+* lancer ses tests unitaires (si, il paraît que ça se fait beaucoup)
+* déployer son application
+* rafraîchir son navigateur</p>
+
+<p>Et recommencer &hellip;</p>
+
+<p>Grunt permet d&#8217;automatiser la plupart de ces tâches (non, il n&#8217;écrira pas le code ou la doc pour vous, mais il peut néanmoins générer la documentation yuidoc par exemple)</p>
+
+<p>Si on ajoute à ça une communauté active qui propose des tâches pour vous faciliter la vie, pourquoi hésiter plus longtemps ?</p>
+
+<h1>Par quoi on commence ?</h1>
+
+<blockquote><p>PS: toutes les manipulations ci-dessous tournent sous MAC, avec nodejs et npm installés</p></blockquote>
+
+<p>Il faut d&#8217;abord installer grunt et l&#8217;outil de ligne de commande grunt-cli</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>% npm install -g grunt-cli</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Si à cette étape vous vous amusez à exécuter la commande grunt (ben, faites le, histoire de suivre un peu), vous risquez de voir ceci apparaître :</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>% grunt
+</span><span class='line'>grunt-cli: The grunt command line interface. (v0.1.9)
+</span><span class='line'>
+</span><span class='line'>Fatal error: Unable to find local grunt.
+</span><span class='line'>
+</span><span class='line'>If you're seeing this message, either a Gruntfile wasn't found or grunt
+</span><span class='line'>hasn't been installed locally to your project. For more information about
+</span><span class='line'>installing and configuring grunt, please see the Getting Started guide:
+</span><span class='line'>
+</span><span class='line'>http://gruntjs.com/getting-started</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Ce message indique que le moteur de grunt n&#8217;est pas installé, et que grunt utilise un fichier de configuration <code>Grunfile.js</code> décrivant l&#8217;ensemble des tâches que vous souhaitez le voir faire exécuter.</p>
+
+<h1>Installation de grunt</h1>
+
+<p>Créez puis ouvrez les fichier suivant avec votre éditeur favori.</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>% touch Gruntfile.js package.json</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Nous allons tout d&#8217;abord installer le package node de grunt en utilisant le gestionnaire de packages de node.
+Commencez par éditer le fichier package.json.</p>
+
+<figure class='code'><figcaption><span>package.json </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+</pre></td><td class='code'><pre><code class='json'><span class='line'><span class="p">{</span>
+</span><span class='line'>  <span class="nt">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;grunt-article&quot;</span><span class="p">,</span>
+</span><span class='line'>  <span class="nt">&quot;private&quot;</span><span class="p">:</span> <span class="kc">false</span><span class="p">,</span>
+</span><span class='line'>  <span class="nt">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Grunt article source files&quot;</span><span class="p">,</span>
+</span><span class='line'>  <span class="nt">&quot;version&quot;</span><span class="p">:</span> <span class="s2">&quot;0.0.1&quot;</span><span class="p">,</span>
+</span><span class='line'>  <span class="nt">&quot;author&quot;</span><span class="p">:</span> <span class="p">{</span>
+</span><span class='line'>    <span class="nt">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;jtbonhomme&quot;</span>
+</span><span class='line'>  <span class="p">},</span>
+</span><span class='line'>  <span class="nt">&quot;devDependencies&quot;</span><span class="p">:</span> <span class="p">{</span>
+</span><span class='line'>    <span class="nt">&quot;grunt&quot;</span> <span class="p">:</span> <span class="s2">&quot;~0.4.5&quot;</span>
+</span><span class='line'>  <span class="p">}</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Sauvez et lancez la commande qui installe les dépendances node:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>npm install</span></code></pre></td></tr></table></div></figure>
+
+
+<p>A cette étape, vous devez pouvoir exécuter grunt (l&#8217;option -v pour verbose):</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>% grunt -v
+</span><span class='line'>Initializing
+</span><span class='line'>Command-line options: --verbose
+</span><span class='line'>
+</span><span class='line'>Reading "Gruntfile.js" Gruntfile...OK
+</span><span class='line'>
+</span><span class='line'>Registering Gruntfile tasks.
+</span><span class='line'>Loading "Gruntfile.js" tasks...OK
+</span><span class='line'>&gt;&gt; No tasks were registered or unregistered.
+</span><span class='line'>
+</span><span class='line'>No tasks specified, running default tasks.
+</span><span class='line'>Running tasks: default
+</span><span class='line'>Warning: Task "default" not found. Use --force to continue.
+</span><span class='line'>
+</span><span class='line'>Aborted due to warnings.</span></code></pre></td></tr></table></div></figure>
+
+
+<p>On voit que grunt cherche dans le fichier Gruntfile.js les tâches à enregistrer et, en l&#8217;absence d&#8217;indication complémentaire, essaie de lancer une tâche <code>default</code>, qu&#8217;il ne trouve pas parce que, pour ceux qui suivent, nous n&#8217;avons encore rien écrit dans Gruntfile.js.</p>
+
+<h1>Gruntfile.js</h1>
+
+<p>Imaginons que nous compilons notre projet et que le résultat soit déposé dans un répertoire <code>public</code> et que nous souhaitons définir une tâche qui permette de vider le contenu de ce répertoire.</p>
+
+<p>Nous allons utiliser un des nombreux plugins de grunt : <code>grunt-contrib-clean</code></p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>% npm install grunt-contrib-clean --save-dev</span></code></pre></td></tr></table></div></figure>
+
+
+<blockquote><p>l&#8217;option &mdash;save-dev permet d&#8217;ajouter automatiquementla dépendance au fichier package.json</p></blockquote>
+
+<p>Editez le fichier Gruntfile.js pour ajouter le code suivant:</p>
+
+<figure class='code'><figcaption><span>Gruntfile.js </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+</pre></td><td class='code'><pre><code class='js'><span class='line'><span class="nx">module</span><span class="p">.</span><span class="nx">exports</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">grunt</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>  <span class="s1">&#39;use strict&#39;</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="c1">// Project configuration.</span>
+</span><span class='line'>  <span class="nx">grunt</span><span class="p">.</span><span class="nx">initConfig</span><span class="p">({</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="nx">clean</span><span class="o">:</span> <span class="p">{</span>
+</span><span class='line'>      <span class="nx">all</span><span class="o">:</span> <span class="p">[</span>
+</span><span class='line'>        <span class="s1">&#39;public&#39;</span>
+</span><span class='line'>      <span class="p">]</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'>  <span class="p">});</span>
+</span><span class='line'>
+</span><span class='line'>
+</span><span class='line'>  <span class="c1">// Load the plugin that provides the &quot;uglify&quot; task.</span>
+</span><span class='line'>  <span class="nx">grunt</span><span class="p">.</span><span class="nx">loadNpmTasks</span><span class="p">(</span><span class="s1">&#39;grunt-contrib-clean&#39;</span><span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="c1">// Default task(s).</span>
+</span><span class='line'>  <span class="nx">grunt</span><span class="p">.</span><span class="nx">registerTask</span><span class="p">(</span><span class="s1">&#39;default&#39;</span><span class="p">,</span> <span class="p">[</span><span class="s1">&#39;clean:all&#39;</span><span class="p">]);</span>
+</span><span class='line'>
+</span><span class='line'><span class="p">};</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Puis, créez un répertoire <code>public</code>, ajoutez-y un fichier <code>test</code> et lancez grunt:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>% mkdir public
+</span><span class='line'>% touch public/test
+</span><span class='line'>% ls
+</span><span class='line'>Gruntfile.js node_modules package.json public
+</span><span class='line'>% grunt
+</span><span class='line'>Running "clean:all" (clean) task
+</span><span class='line'>Cleaning public...OK
+</span><span class='line'>
+</span><span class='line'>Done, without errors.
+</span><span class='line'>% ls
+</span><span class='line'>Gruntfile.js node_modules package.json</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Le répertoire <code>public</code> et son contenu ont bien été supprimés.</p>
+
+<p>Nous avons créé notre première tâche grunt.</p>
+
+<h1>Les plugins</h1>
+
+<p>Grunt est beaucoup supporté par la communauté, et la multitude de <a href="http://gruntjs.com/plugins">plugins disponibles</a> pourront vous rendre de grands services.</p>
+
+<p>Quelques exemples parmi les plus connus:</p>
+
+<ul>
+<li><a href="https://github.com/gruntjs/grunt-contrib-watch">grunt-contrib-watch</a> : permet de surveiller une arborescence de fichier de de déclencher des actions en cas de modification de l&#8217;un d&#8217;eux (voir exemples ci-dessous)</li>
+<li><a href="https://github.com/gruntjs/grunt-contrib-copy">grunt-contrib-copy</a> : comme le nom l&#8217;indique, permet de copier des fichiers d&#8217;un répertoire A à un répertoire B</li>
+<li><a href="https://github.com/gruntjs/grunt-contrib-concat">grunt-contrib-concat</a> : concatène plusieurs fichiers en un seul</li>
+<li><a href="https://github.com/gruntjs/grunt-contrib-uglify">grunt-contrib-uglify</a> : &ldquo;minifie&rdquo; des fichiers en utilisant la librairie UglifyJS</li>
+<li><a href="https://github.com/gruntjs/grunt-contrib-jshint">grunt-contrib-jshint</a> : linter javascript utilisant la librairie <a href="http://www.jshint.com/">JSHint</a> (voir exemple plus bas)</li>
+<li><a href="https://github.com/sindresorhus/grunt-shell">grunt-shell</a> : permet de définir des tâches custom utilisant le shell (voir exemple plus bas)</li>
+</ul>
+
+
+<h1>Pour aller plus loin &hellip;</h1>
+
+<h2>Les tâches</h2>
+
+<h2>Quelques exemples d&#8217;utilisation des plugins</h2>
+
+<h3>grunt-contrib-jshint</h3>
+
+<h3>grunt-contrib-watch</h3>
+
+<h3>grunt-shell</h3>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn"><a href="/about" title="About the author (Jean-Thierry BONHOMME)" rel="author">Jean-Thierry BONHOMME</a></span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-07-05T11:03:24+02:00" pubdate data-updated="true">Jul 5<sup>th</sup>, 2014</time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/grunt/'>grunt</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://jtbonhomme.github.io/blog/2014/07/05/grunt-lautomatisation-facile/" data-via="jtbonhomme" data-counturl="http://jtbonhomme.github.io/blog/2014/07/05/grunt-lautomatisation-facile/" >Tweet</a>
+  
+  
+  
+</div>
+
+    
+    <p class="meta">
+      
+      
+    </p>
+  </footer>
+</article>
+
+</div>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2014 - Jean-Thierry BONHOMME -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>
