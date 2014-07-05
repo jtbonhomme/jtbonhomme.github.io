@@ -4,7 +4,7 @@
   <title><![CDATA[Blog]]></title>
   <link href="http://jtbonhomme.github.io/atom.xml" rel="self"/>
   <link href="http://jtbonhomme.github.io/"/>
-  <updated>2014-07-05T14:33:20+02:00</updated>
+  <updated>2014-07-05T17:03:59+02:00</updated>
   <id>http://jtbonhomme.github.io/</id>
   <author>
     <name><![CDATA[Jean-Thierry BONHOMME]]></name>
@@ -30,19 +30,25 @@
 
 <p>c&#8217;est à cette dernière catégorie que nous allons nous intéresser et plus particulièrement au plus célèbre d&#8217;entre eux: <a href="http://gruntjs.com/">grunt</a>.</p>
 
+<blockquote><p>tous les codes source de cet article sont disponibles sous <a href="https://github.com/jtbonhomme/grunt-article">github</a></p></blockquote>
+
 <h1>A quoi ça sert ?</h1>
 
 <p>Grunt est un exécuteur de tâches qui peuvent être lancées unitairement, ou par groupes.</p>
 
-<p>Pour parler concrêtement, le travail quotidien d&#8217;un dev front consiste quasi continuellement à :
-* développer ou modifier son code (ou celui du voisin)
-* corriger les fautes de syntaxes qui ne correspondent pas aux règles de codage
-* vider les répertoires de sortie où sont compilés mes fichiers
-* compiler ses templates pour générer les fichiers html
-* compiler et minifier ses fichiers html
-* lancer ses tests unitaires (si, il paraît que ça se fait beaucoup)
-* déployer son application
-* rafraîchir son navigateur</p>
+<p>Pour parler concrêtement, le travail quotidien d&#8217;un dev front consiste quasi continuellement à :</p>
+
+<ul>
+<li>développer ou modifier son code (ou celui du voisin)</li>
+<li>corriger les fautes de syntaxes qui ne correspondent pas aux règles de codage</li>
+<li>vider les répertoires de sortie où sont compilés mes fichiers</li>
+<li>compiler ses templates pour générer les fichiers html</li>
+<li>compiler et minifier ses fichiers html</li>
+<li>lancer ses tests unitaires (si, il paraît que ça se fait beaucoup)</li>
+<li>déployer son application</li>
+<li>rafraîchir son navigateur</li>
+</ul>
+
 
 <p>Et recommencer &hellip;</p>
 
@@ -275,15 +281,97 @@ Commencez par éditer le fichier package.json.</p>
 
 <h1>Pour aller plus loin &hellip;</h1>
 
-<h2>Les tâches</h2>
+<p>Pour ceux qui souhaitent approfondir un peu, vous trouverez ci-dessous quelques exemples complémentaires et un paragraphe sur l&#8217;utilisation de tâches personnalisées.</p>
 
 <h2>Quelques exemples d&#8217;utilisation des plugins</h2>
 
-<h3>grunt-contrib-jshint</h3>
+<h4>grunt-contrib-jshint</h4>
 
-<h3>grunt-contrib-watch</h3>
+<p>JSHint permet de détecter dans le code javascript des erreurs de syntaxe simples (oubli d&#8217;un &lsquo;;&rsquo; à la fin d&#8217;une ligne, oubli d&#8217;une accolade à la fin d&#8217;un bloc, utilisation de noms de variable non conforme, &hellip;)</p>
 
-<h3>grunt-shell</h3>
+<p>Il s&#8217;installe de la manière suivante:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>% npm install grunt-contrib-jshint --save-dev</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Et il se configure dans le Gruntfile suivant l&#8217;exmple ci-dessous, qui va vérifier le fichier <code>Gruntfile.js</code> lui-même, et tous les fichiers javascript se trouvant dans le répertoire <code>js</code> :</p>
+
+<figure class='code'><figcaption><span>Gruntfile.js </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+</pre></td><td class='code'><pre><code class='js'><span class='line'><span class="nx">module</span><span class="p">.</span><span class="nx">exports</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">grunt</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>  <span class="s1">&#39;use strict&#39;</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="c1">// Project configuration.</span>
+</span><span class='line'>  <span class="nx">grunt</span><span class="p">.</span><span class="nx">initConfig</span><span class="p">({</span>
+</span><span class='line'>
+</span><span class='line'>   <span class="nx">jshint</span><span class="o">:</span> <span class="p">{</span>
+</span><span class='line'>      <span class="nx">files</span><span class="o">:</span> <span class="p">[</span>
+</span><span class='line'>        <span class="s1">&#39;Gruntfile.js&#39;</span><span class="p">,</span>
+</span><span class='line'>        <span class="s1">&#39;js/**/*.js&#39;</span>
+</span><span class='line'>      <span class="p">],</span>
+</span><span class='line'>      <span class="nx">options</span><span class="o">:</span> <span class="p">{</span>
+</span><span class='line'>      <span class="p">}</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="p">});</span>
+</span><span class='line'>
+</span><span class='line'>
+</span><span class='line'>  <span class="c1">// Load the plugin that provides the &quot;uglify&quot; task.</span>
+</span><span class='line'>  <span class="nx">grunt</span><span class="p">.</span><span class="nx">loadNpmTasks</span><span class="p">(</span><span class="s1">&#39;grunt-contrib-jshint&#39;</span><span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="c1">// Default task(s).</span>
+</span><span class='line'>  <span class="nx">grunt</span><span class="p">.</span><span class="nx">registerTask</span><span class="p">(</span><span class="s1">&#39;default&#39;</span><span class="p">,</span> <span class="p">[</span><span class="s1">&#39;jshint&#39;</span><span class="p">]);</span>
+</span><span class='line'>
+</span><span class='line'><span class="p">};</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Puis il vous suffit d&#8217;exécuter la commande <code>grunt</code>:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>% grunt
+</span><span class='line'>Running "jshint:files" (jshint) task
+</span><span class='line'>&gt;&gt; 1 file lint free.
+</span><span class='line'>
+</span><span class='line'>Done, without errors.</span></code></pre></td></tr></table></div></figure>
+
+
+<p>On voit que le fichier <code>Gruntfile.js</code> a été vérifié avec succès.</p>
+
+<h4>grunt-contrib-watch</h4>
+
+<h4>grunt-shell</h4>
+
+<h2>Créer ses propres tâches</h2>
 ]]></content>
   </entry>
   
