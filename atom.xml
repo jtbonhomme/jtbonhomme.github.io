@@ -4,7 +4,7 @@
   <title><![CDATA[Blog]]></title>
   <link href="http://jtbonhomme.github.io/atom.xml" rel="self"/>
   <link href="http://jtbonhomme.github.io/"/>
-  <updated>2014-07-06T11:16:06+02:00</updated>
+  <updated>2014-07-06T11:17:01+02:00</updated>
   <id>http://jtbonhomme.github.io/</id>
   <author>
     <name><![CDATA[Jean-Thierry BONHOMME]]></name>
@@ -903,7 +903,7 @@ Les sous-sections suivantes définissent les appels systèmes.</p>
 
 <p>Puis on crée un répertoire <code>tasks</code> contenant un fichiers <code>hash.js</code>:</p>
 
-<figure class='code'><figcaption><span>hash.js </span></figcaption>
+<figure class='code'><figcaption><span>tasks/hash.js </span></figcaption>
 <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
