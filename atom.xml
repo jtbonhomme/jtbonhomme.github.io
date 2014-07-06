@@ -4,7 +4,7 @@
   <title><![CDATA[Blog]]></title>
   <link href="http://jtbonhomme.github.io/atom.xml" rel="self"/>
   <link href="http://jtbonhomme.github.io/"/>
-  <updated>2014-07-06T11:12:42+02:00</updated>
+  <updated>2014-07-06T11:14:36+02:00</updated>
   <id>http://jtbonhomme.github.io/</id>
   <author>
     <name><![CDATA[Jean-Thierry BONHOMME]]></name>
@@ -92,7 +92,7 @@
 
 <p>Ce message indique que le moteur de grunt n&#8217;est pas installé, et que grunt utilise un fichier de configuration <code>Grunfile.js</code> décrivant l&#8217;ensemble des tâches que vous souhaitez le voir faire exécuter.</p>
 
-<h1>Installation de grunt</h1>
+<h1>Configuration de grunt</h1>
 
 <p>Créez puis ouvrez les fichier suivant avec votre éditeur favori.</p>
 
@@ -173,7 +173,7 @@ Commencez par éditer le fichier package.json.</p>
 
 <p>On voit que grunt cherche dans le fichier Gruntfile.js les tâches à enregistrer et, en l&#8217;absence d&#8217;indication complémentaire, essaie de lancer une tâche <code>default</code>, qu&#8217;il ne trouve pas parce que, pour ceux qui suivent, nous n&#8217;avons encore rien écrit dans Gruntfile.js.</p>
 
-<h1>Gruntfile.js</h1>
+<h1>La première tâche</h1>
 
 <p>Imaginons que nous compilons notre projet et que le résultat soit déposé dans un répertoire <code>public</code> et que nous souhaitons définir une tâche qui permette de vider le contenu de ce répertoire.</p>
 
