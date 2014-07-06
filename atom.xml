@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
 
-  <title><![CDATA[Blog]]></title>
+  <title><![CDATA[]]></title>
   <link href="http://jtbonhomme.github.io/atom.xml" rel="self"/>
   <link href="http://jtbonhomme.github.io/"/>
-  <updated>2014-07-06T17:44:30+02:00</updated>
+  <updated>2014-07-06T17:45:55+02:00</updated>
   <id>http://jtbonhomme.github.io/</id>
   <author>
     <name><![CDATA[Jean-Thierry BONHOMME]]></name>
