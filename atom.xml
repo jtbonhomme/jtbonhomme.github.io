@@ -4,7 +4,7 @@
   <title><![CDATA[Blog]]></title>
   <link href="http://jtbonhomme.github.io/atom.xml" rel="self"/>
   <link href="http://jtbonhomme.github.io/"/>
-  <updated>2014-07-06T11:07:48+02:00</updated>
+  <updated>2014-07-06T11:12:42+02:00</updated>
   <id>http://jtbonhomme.github.io/</id>
   <author>
     <name><![CDATA[Jean-Thierry BONHOMME]]></name>
@@ -1061,7 +1061,7 @@ Les sous-sections suivantes définissent les appels systèmes.</p>
 </span><span class='line'>Aborted due to warnings.</span></code></pre></td></tr></table></div></figure>
 
 
-<h2>Liens pour aller plus loin</h2>
+<h2>Liens pour aller (encore) plus loin</h2>
 
 <ul>
 <li><a href="http://chrisawren.com/posts/Advanced-Grunt-tooling">Advanced Grunt Tooling</a></li>
