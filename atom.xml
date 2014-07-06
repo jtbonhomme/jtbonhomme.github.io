@@ -4,7 +4,7 @@
   <title><![CDATA[Blog]]></title>
   <link href="http://jtbonhomme.github.io/atom.xml" rel="self"/>
   <link href="http://jtbonhomme.github.io/"/>
-  <updated>2014-07-06T11:14:36+02:00</updated>
+  <updated>2014-07-06T11:16:06+02:00</updated>
   <id>http://jtbonhomme.github.io/</id>
   <author>
     <name><![CDATA[Jean-Thierry BONHOMME]]></name>
@@ -183,7 +183,7 @@ Commencez par éditer le fichier package.json.</p>
 </pre></td><td class='code'><pre><code class=''><span class='line'>% npm install grunt-contrib-clean --save-dev</span></code></pre></td></tr></table></div></figure>
 
 
-<blockquote><p>l&#8217;option &mdash;save-dev permet d&#8217;ajouter automatiquementla dépendance au fichier package.json</p></blockquote>
+<blockquote><p>l&#8217;option &mdash;save-dev permet d&#8217;ajouter automatiquement la dépendance au fichier package.json</p></blockquote>
 
 <p>Editez le fichier Gruntfile.js pour ajouter le code suivant:</p>
 
