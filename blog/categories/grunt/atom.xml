@@ -4,7 +4,7 @@
   <title><![CDATA[Category: grunt | ]]></title>
   <link href="http://jtbonhomme.github.io/blog/categories/grunt/atom.xml" rel="self"/>
   <link href="http://jtbonhomme.github.io/"/>
-  <updated>2014-07-06T17:45:55+02:00</updated>
+  <updated>2014-07-13T10:28:42+02:00</updated>
   <id>http://jtbonhomme.github.io/</id>
   <author>
     <name><![CDATA[Jean-Thierry BONHOMME]]></name>
@@ -12,6 +12,239 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Grunt: l'automatisation facile (part 1)]]></title>
+    <link href="http://jtbonhomme.github.io/blog/2014/07/05/grunt-lautomatisation-facile-part-1/"/>
+    <updated>2014-07-05T11:03:24+02:00</updated>
+    <id>http://jtbonhomme.github.io/blog/2014/07/05/grunt-lautomatisation-facile-part-1</id>
+    <content type="html"><![CDATA[<p><img src="http://gruntjs.com/img/grunt-logo.svg" alt="" /></p>
+
+<p>La majorité des développeurs que je connais ont un point commun, une caractéristique qui les distinguent des autres professions.</p>
+
+<p>Ils sont paresseux.</p>
+
+<p>Loin d'être un défaut, cette paresse est encouragée car elle se traduit par une tendance à éviter les tâches répétitives et fasitidieuses, et libèrent du temps pour les activités plus productives (écriture de documentation et test &hellip; quoique &hellip;)</p>
+
+<p>Les outils qui permettent au développeur consciencieux d'en faire le moins possible foisonnent; générateurs de templates et boilerplates, snippets, gist et autres pastebin, et outils d'automatisation.</p>
+
+<p>C'est à cette dernière catégorie d'outils que nous allons nous intéresser et plus particulièrement au plus célèbre d'entre eux: <a href="http://gruntjs.com/">grunt</a>.</p>
+
+<blockquote><p>tous les codes source de cet article sont disponibles sous <a href="https://github.com/jtbonhomme/grunt-article">github</a></p></blockquote>
+
+<h1>A quoi ça sert ?</h1>
+
+<p>Grunt est un exécuteur de tâches qui peuvent être lancées unitairement, ou par groupes.</p>
+
+<p>Pour parler concrêtement, le travail quotidien d'un dev front consiste quasi continuellement à :</p>
+
+<ul>
+<li>développer ou modifier son code (ou celui du voisin)</li>
+<li>corriger les fautes de syntaxes qui ne correspondent pas aux règles de codage</li>
+<li>vider les répertoires de sortie où sont compilés ses fichiers</li>
+<li>compiler ses templates pour générer les fichiers html</li>
+<li>compiler et minifier ses fichiers html</li>
+<li>lancer ses tests unitaires (si si si, il paraît que ça se fait beaucoup)</li>
+<li>déployer son application</li>
+<li>rafraîchir son navigateur</li>
+</ul>
+
+
+<p>Et recommencer &hellip;</p>
+
+<p>Grunt permet d'automatiser la plupart de ces tâches (non, il n'écrira pas le code ou la doc pour vous, mais il peut néanmoins générer la documentation yuidoc par exemple)</p>
+
+<p>Si on ajoute à ça une communauté active qui propose un grand nombre de plugins pour vous faciliter la vie, pourquoi hésiter plus longtemps ?</p>
+
+<h1>Par quoi on commence ?</h1>
+
+<blockquote><p>PS: toutes les manipulations ci-dessous tournent sous MAC, avec nodejs et npm installés</p></blockquote>
+
+<p>Il faut d'abord installer grunt et l'outil de ligne de commande grunt-cli</p>
+
+<p><code>
+% npm install -g grunt-cli
+</code>
+Si à cette étape vous vous amusez à exécuter la commande grunt (ben, faites le, histoire de suivre un peu), vous risquez de voir ceci apparaître :</p>
+
+<p>```
+% grunt
+grunt-cli: The grunt command line interface. (v0.1.9)</p>
+
+<p>Fatal error: Unable to find local grunt.</p>
+
+<p>If you&rsquo;re seeing this message, either a Gruntfile wasn&rsquo;t found or grunt
+hasn&rsquo;t been installed locally to your project. For more information about
+installing and configuring grunt, please see the Getting Started guide:</p>
+
+<p><a href="http://gruntjs.com/getting-started">http://gruntjs.com/getting-started</a>
+```</p>
+
+<p>Ce message indique que le moteur de grunt n'est pas installé, et que grunt utilise un fichier de configuration <code>Grunfile.js</code> décrivant l'ensemble des tâches que vous souhaitez le voir faire exécuter.</p>
+
+<h1>Configuration de grunt</h1>
+
+<p>Créez puis ouvrez les fichier suivant avec votre éditeur favori.</p>
+
+<p><code>
+% touch Gruntfile.js package.json
+</code></p>
+
+<p>Nous allons tout d'abord installer le package node de grunt en utilisant le gestionnaire de packages de node.
+Commencez par éditer le fichier package.json.</p>
+
+<p><div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>package.json </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+</pre></td><td class='code'><pre><code class='json'><span class='line'><span class="p">{</span>
+</span><span class='line'>  <span class="err">&amp;ldquo;name&amp;rdquo;:</span> <span class="err">&amp;ldquo;grunt-article&amp;rdquo;,</span>
+</span><span class='line'>  <span class="err">&amp;ldquo;private&amp;rdquo;:</span> <span class="err">false,</span>
+</span><span class='line'>  <span class="err">&amp;ldquo;description&amp;rdquo;:</span> <span class="err">&amp;ldquo;Grunt</span> <span class="err">article</span> <span class="err">source</span> <span class="err">files&amp;rdquo;,</span>
+</span><span class='line'>  <span class="err">&amp;ldquo;version&amp;rdquo;:</span> <span class="err">&amp;ldquo;0.0.1&amp;rdquo;,</span>
+</span><span class='line'>  <span class="err">&amp;ldquo;author&amp;rdquo;:</span> <span class="err">{&lt;/p&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="err">&lt;pre&gt;&lt;code&gt;</span><span class="nt">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;jtbonhomme&quot;</span>
+</span><span class='line'><span class="err">&lt;/code&gt;&lt;/pre&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="err">&lt;p&gt;</span>  <span class="p">}</span><span class="err">,</span>
+</span><span class='line'>  <span class="err">&amp;ldquo;devDependencies&amp;rdquo;:</span> <span class="p">{</span><span class="err">&lt;/p&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="err">&lt;pre&gt;&lt;code&gt;</span><span class="nt">&quot;grunt&quot;</span> <span class="p">:</span> <span class="s2">&quot;~0.4.5&quot;</span>
+</span><span class='line'><span class="err">&lt;/code&gt;&lt;/pre&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="err">&lt;p&gt;</span>  <span class="p">}</span>
+</span><span class='line'><span class="err">}</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div></p>
+
+<p>Sauvez et lancez la commande qui installe les dépendances node:</p>
+
+<p><code>
+npm install
+</code></p>
+
+<p>A cette étape, vous devez pouvoir exécuter grunt (l'option -v pour verbose):</p>
+
+<p>```
+% grunt -v
+Initializing
+Command-line options: &mdash;verbose</p>
+
+<p>Reading &ldquo;Gruntfile.js&rdquo; Gruntfile&hellip;OK</p>
+
+<p>Registering Gruntfile tasks.
+Loading &ldquo;Gruntfile.js&rdquo; tasks&hellip;OK</p>
+
+<blockquote><blockquote><p>No tasks were registered or unregistered.</p></blockquote></blockquote>
+
+<p>No tasks specified, running default tasks.
+Running tasks: default
+Warning: Task &ldquo;default&rdquo; not found. Use &mdash;force to continue.</p>
+
+<p>Aborted due to warnings.
+```</p>
+
+<p>On voit que grunt cherche dans le fichier Gruntfile.js les tâches à enregistrer et, en l'absence d'indication complémentaire, essaie de lancer une tâche <code>default</code>, qu'il ne trouve pas parce que, pour ceux qui suivent, nous n'avons encore rien écrit dans Gruntfile.js.</p>
+
+<h1>La première tâche</h1>
+
+<p>Imaginons que nous compilons notre projet et que le résultat soit déposé dans un répertoire <code>public</code> et que nous souhaitons définir une tâche qui permette de vider le contenu de ce répertoire.</p>
+
+<p>Nous allons utiliser un des nombreux plugins de grunt : <code>grunt-contrib-clean</code></p>
+
+<p><code>
+% npm install grunt-contrib-clean --save-dev
+</code></p>
+
+<blockquote><p>l'option &mdash;save-dev permet d'ajouter automatiquement la dépendance au fichier package.json</p></blockquote>
+
+<p>Editez le fichier Gruntfile.js pour ajouter le code suivant:</p>
+
+<p><div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>Gruntfile.js </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+</pre></td><td class='code'><pre><code class='js'><span class='line'><span class="nx">module</span><span class="p">.</span><span class="nx">exports</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">grunt</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>  <span class="o">&amp;</span><span class="nx">lsquo</span><span class="p">;</span><span class="nx">use</span> <span class="nx">strict</span><span class="o">&amp;</span><span class="nx">rsquo</span><span class="p">;;</span><span class="o">&lt;</span><span class="err">/p&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="nx">p</span><span class="o">&gt;</span>  <span class="c1">// Project configuration.</span>
+</span><span class='line'>  <span class="nx">grunt</span><span class="p">.</span><span class="nx">initConfig</span><span class="p">({</span><span class="o">&lt;</span><span class="err">/p&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="nx">pre</span><span class="o">&gt;&lt;</span><span class="nx">code</span><span class="o">&gt;</span><span class="nx">clean</span><span class="o">:</span> <span class="p">{</span>
+</span><span class='line'>  <span class="nx">all</span><span class="o">:</span> <span class="p">[</span>
+</span><span class='line'>    <span class="s1">&#39;public&#39;</span>
+</span><span class='line'>  <span class="p">]</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'><span class="o">&lt;</span><span class="err">/code&gt;&lt;/pre&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="nx">p</span><span class="o">&gt;</span>  <span class="p">});</span><span class="o">&lt;</span><span class="err">/p&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="nx">p</span><span class="o">&gt;</span>  <span class="c1">// Load the plugin that provides the &amp;ldquo;uglify&amp;rdquo; task.</span>
+</span><span class='line'>  <span class="nx">grunt</span><span class="p">.</span><span class="nx">loadNpmTasks</span><span class="p">(</span><span class="o">&amp;</span><span class="nx">lsquo</span><span class="p">;</span><span class="nx">grunt</span><span class="o">-</span><span class="nx">contrib</span><span class="o">-</span><span class="nx">clean</span><span class="o">&amp;</span><span class="nx">rsquo</span><span class="p">;);</span><span class="o">&lt;</span><span class="err">/p&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="nx">p</span><span class="o">&gt;</span>  <span class="c1">// Default task(s).</span>
+</span><span class='line'>  <span class="nx">grunt</span><span class="p">.</span><span class="nx">registerTask</span><span class="p">(</span><span class="o">&amp;</span><span class="nx">lsquo</span><span class="p">;</span><span class="k">default</span><span class="o">&amp;</span><span class="nx">rsquo</span><span class="p">;,</span> <span class="p">[</span><span class="o">&amp;</span><span class="nx">lsquo</span><span class="p">;</span><span class="nx">clean</span><span class="o">:</span><span class="nx">all</span><span class="o">&amp;</span><span class="nx">rsquo</span><span class="p">;]);</span><span class="o">&lt;</span><span class="err">/p&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="nx">p</span><span class="o">&gt;</span><span class="p">};</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div></p>
+
+<p>Puis, créez un répertoire <code>public</code>, ajoutez-y un fichier <code>test</code> et lancez grunt:</p>
+
+<p>```
+% mkdir public
+% touch public/test
+% ls
+Gruntfile.js node_modules package.json public
+% grunt
+Running &ldquo;clean:all&rdquo; (clean) task
+Cleaning public&hellip;OK</p>
+
+<p>Done, without errors.
+% ls
+Gruntfile.js node_modules package.json
+```</p>
+
+<p>Le répertoire <code>public</code> et son contenu ont bien été supprimés.</p>
+
+<p>Nous avons créé notre première tâche grunt.</p>
+
+<p>Nous verrons dans le prochain article comment utiliser les plugins et créer nos propres tâches.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Grunt: l'automatisation facile]]></title>
@@ -655,28 +888,28 @@ Les sous-sections suivantes définissent les appels systèmes.</p>
 % grunt shell:gitlog
 Running &ldquo;shell:gitlog&rdquo; (shell) task
 commit 8a797952e14d0e5301432fce2dca8d944e172f36
-Author: Jean-Thierry BONHOMME <a href="&#109;&#97;&#105;&#108;&#116;&#x6f;&#58;&#x6a;&#x74;&#98;&#x6f;&#x6e;&#x68;&#111;&#x6d;&#109;&#101;&#64;&#x67;&#109;&#x61;&#x69;&#108;&#x2e;&#99;&#111;&#109;">&#x6a;&#116;&#x62;&#x6f;&#110;&#x68;&#x6f;&#109;&#x6d;&#x65;&#64;&#x67;&#109;&#97;&#105;&#x6c;&#46;&#99;&#111;&#109;</a>
+Author: Jean-Thierry BONHOMME <a href="&#x6d;&#97;&#x69;&#x6c;&#x74;&#111;&#x3a;&#x6a;&#116;&#98;&#x6f;&#x6e;&#104;&#111;&#x6d;&#109;&#101;&#x40;&#103;&#109;&#97;&#105;&#x6c;&#46;&#99;&#111;&#x6d;">&#x6a;&#116;&#x62;&#111;&#x6e;&#104;&#x6f;&#109;&#x6d;&#101;&#64;&#103;&#109;&#97;&#x69;&#x6c;&#x2e;&#99;&#111;&#x6d;</a>
 Date:   Sat Jul 5 17:04:32 2014 +0200</p>
 
 <pre><code>Added jshint task
 </code></pre>
 
 <p>commit 85fc208f8e2ee257a782d0787c4233d3167044a8
-Author: Jean-Thierry BONHOMME <a href="&#109;&#97;&#x69;&#x6c;&#116;&#111;&#x3a;&#x6a;&#x74;&#x62;&#x6f;&#110;&#x68;&#x6f;&#109;&#x6d;&#101;&#x40;&#x67;&#109;&#97;&#105;&#x6c;&#x2e;&#99;&#x6f;&#109;">&#106;&#116;&#x62;&#111;&#110;&#x68;&#111;&#x6d;&#x6d;&#101;&#64;&#103;&#x6d;&#97;&#105;&#108;&#x2e;&#x63;&#111;&#x6d;</a>
+Author: Jean-Thierry BONHOMME <a href="&#109;&#x61;&#x69;&#108;&#x74;&#x6f;&#x3a;&#106;&#116;&#98;&#x6f;&#x6e;&#104;&#111;&#109;&#109;&#101;&#x40;&#103;&#109;&#x61;&#105;&#108;&#x2e;&#x63;&#111;&#109;">&#106;&#116;&#98;&#x6f;&#110;&#x68;&#x6f;&#109;&#x6d;&#101;&#x40;&#x67;&#109;&#x61;&#105;&#108;&#46;&#99;&#111;&#109;</a>
 Date:   Sat Jul 5 16:18:21 2014 +0200</p>
 
 <pre><code>Update article reference)
 </code></pre>
 
 <p>commit 752d0c8b6cc74c6a98417d43e42ba486020aa4db
-Author: Jean-Thierry BONHOMME <a href="&#x6d;&#x61;&#105;&#x6c;&#116;&#111;&#58;&#x6a;&#x74;&#98;&#x6f;&#x6e;&#104;&#111;&#109;&#109;&#101;&#64;&#103;&#x6d;&#97;&#105;&#108;&#46;&#99;&#111;&#109;">&#106;&#x74;&#98;&#x6f;&#110;&#x68;&#x6f;&#109;&#x6d;&#101;&#64;&#103;&#x6d;&#97;&#105;&#108;&#46;&#99;&#111;&#x6d;</a>
+Author: Jean-Thierry BONHOMME <a href="&#x6d;&#x61;&#105;&#x6c;&#x74;&#x6f;&#x3a;&#106;&#116;&#x62;&#x6f;&#110;&#x68;&#x6f;&#x6d;&#x6d;&#x65;&#64;&#x67;&#109;&#x61;&#x69;&#x6c;&#x2e;&#99;&#x6f;&#x6d;">&#106;&#x74;&#x62;&#111;&#110;&#x68;&#x6f;&#x6d;&#109;&#101;&#x40;&#103;&#109;&#97;&#x69;&#108;&#46;&#x63;&#x6f;&#x6d;</a>
 Date:   Sat Jul 5 16:17:34 2014 +0200</p>
 
 <pre><code>First commit
 </code></pre>
 
 <p>commit 4b6649ed0c838723565649c6fbc0189bec19c874
-Author: Jean-Thierry BONHOMME <a href="&#109;&#97;&#x69;&#108;&#x74;&#x6f;&#58;&#x6a;&#116;&#98;&#x6f;&#110;&#x68;&#x6f;&#x6d;&#x6d;&#101;&#64;&#x67;&#109;&#97;&#105;&#108;&#x2e;&#99;&#111;&#109;">&#x6a;&#x74;&#98;&#111;&#x6e;&#x68;&#x6f;&#x6d;&#109;&#101;&#x40;&#x67;&#109;&#x61;&#105;&#108;&#46;&#x63;&#x6f;&#109;</a>
+Author: Jean-Thierry BONHOMME <a href="&#109;&#97;&#x69;&#108;&#x74;&#111;&#x3a;&#106;&#116;&#98;&#111;&#x6e;&#x68;&#x6f;&#x6d;&#109;&#101;&#64;&#x67;&#109;&#97;&#105;&#x6c;&#46;&#x63;&#111;&#109;">&#x6a;&#x74;&#98;&#111;&#x6e;&#104;&#x6f;&#x6d;&#x6d;&#x65;&#64;&#x67;&#109;&#97;&#x69;&#x6c;&#46;&#x63;&#111;&#109;</a>
 Date:   Sat Jul 5 16:14:15 2014 +0200</p>
 
 <pre><code>Initial commit

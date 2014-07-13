@@ -9,7 +9,7 @@
   <meta name="author" content="Jean-Thierry BONHOMME">
 
   
-  <meta name="description" content="La majorité des développeurs que je connais ont un point commun, une caractéristique qui les distinguent des autres professions. Ils sont paresseux &hellip;">
+  <meta name="description" content="Les plugins Grunt est bien supporté par la communauté, et la multitude de plugins disponibles pourront vous rendre de grands services. Quelques &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -62,6 +62,1150 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2014/07/13/grunt-lautomatisation-facile-part-2/">Grunt: L’automatisation Facile (Part 2)</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-07-13T10:23:27+02:00" pubdate data-updated="true">Jul 13<sup>th</sup>, 2014</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><h1>Les plugins</h1>
+
+<p>Grunt est bien supporté par la communauté, et la multitude de <a href="http://gruntjs.com/plugins">plugins disponibles</a> pourront vous rendre de grands services.</p>
+
+<p>Quelques exemples parmi les plus connus:</p>
+
+<ul>
+<li><a href="https://github.com/gruntjs/grunt-contrib-watch">grunt-contrib-watch</a> : permet de surveiller une arborescence de fichier de de déclencher des actions en cas de modification de l&#8217;un d&#8217;eux (voir exemples ci-dessous)</li>
+<li><a href="https://github.com/gruntjs/grunt-contrib-copy">grunt-contrib-copy</a> : comme le nom l&#8217;indique, permet de copier des fichiers d&#8217;un répertoire A à un répertoire B</li>
+<li><a href="https://github.com/gruntjs/grunt-contrib-concat">grunt-contrib-concat</a> : concatène plusieurs fichiers en un seul</li>
+<li><a href="https://github.com/gruntjs/grunt-contrib-uglify">grunt-contrib-uglify</a> : &ldquo;minifie&rdquo; des fichiers en utilisant la librairie UglifyJS</li>
+<li><a href="https://github.com/gruntjs/grunt-contrib-jshint">grunt-contrib-jshint</a> : linter javascript utilisant la librairie <a href="http://www.jshint.com/">JSHint</a> (voir exemple plus bas)</li>
+<li><a href="https://github.com/sindresorhus/grunt-shell">grunt-shell</a> : permet de définir des tâches custom utilisant le shell (voir exemple plus bas)</li>
+</ul>
+
+
+<h1>Pour aller plus loin &hellip;</h1>
+
+<p>Pour ceux qui souhaitent approfondir un peu, vous trouverez ci-dessous quelques exemples complémentaires et un paragraphe sur l&#8217;utilisation de tâches personnalisées.</p>
+
+<h2>Quelques exemples d&#8217;utilisation des plugins</h2>
+
+<h4>grunt-contrib-jshint</h4>
+
+<p>JSHint permet de détecter dans le code javascript des erreurs de syntaxe simples (oubli d&#8217;un &lsquo;;&rsquo; à la fin d&#8217;une ligne, oubli d&#8217;une accolade à la fin d&#8217;un bloc, utilisation de noms de variable non conforme, &hellip;)</p>
+
+<p>Il s&#8217;installe de la manière suivante:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>% npm install grunt-contrib-jshint --save-dev</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Et il se configure dans le Gruntfile suivant l&#8217;exemple ci-dessous, qui va vérifier le fichier <code>Gruntfile.js</code> lui-même, et tous les fichiers javascript se trouvant dans le répertoire <code>js</code> :</p>
+
+<figure class='code'><figcaption><span>Gruntfile.js </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+</pre></td><td class='code'><pre><code class='js'><span class='line'><span class="nx">module</span><span class="p">.</span><span class="nx">exports</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">grunt</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>  <span class="s1">&#39;use strict&#39;</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="c1">// Project configuration.</span>
+</span><span class='line'>  <span class="nx">grunt</span><span class="p">.</span><span class="nx">initConfig</span><span class="p">({</span>
+</span><span class='line'>
+</span><span class='line'>   <span class="nx">jshint</span><span class="o">:</span> <span class="p">{</span>
+</span><span class='line'>      <span class="nx">files</span><span class="o">:</span> <span class="p">[</span>
+</span><span class='line'>        <span class="s1">&#39;Gruntfile.js&#39;</span><span class="p">,</span>
+</span><span class='line'>        <span class="s1">&#39;js/**/*.js&#39;</span>
+</span><span class='line'>      <span class="p">],</span>
+</span><span class='line'>      <span class="nx">options</span><span class="o">:</span> <span class="p">{</span>
+</span><span class='line'>      <span class="p">}</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="p">});</span>
+</span><span class='line'>
+</span><span class='line'>
+</span><span class='line'>  <span class="c1">// Load the plugin that provides the &quot;jshint&quot; task.</span>
+</span><span class='line'>  <span class="nx">grunt</span><span class="p">.</span><span class="nx">loadNpmTasks</span><span class="p">(</span><span class="s1">&#39;grunt-contrib-jshint&#39;</span><span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="c1">// Default task(s).</span>
+</span><span class='line'>  <span class="nx">grunt</span><span class="p">.</span><span class="nx">registerTask</span><span class="p">(</span><span class="s1">&#39;default&#39;</span><span class="p">,</span> <span class="p">[</span><span class="s1">&#39;jshint&#39;</span><span class="p">]);</span>
+</span><span class='line'>
+</span><span class='line'><span class="p">};</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Puis il vous suffit d&#8217;exécuter la commande <code>grunt</code>:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>% grunt
+</span><span class='line'>Running "jshint:files" (jshint) task
+</span><span class='line'>&gt;&gt; 1 file lint free.
+</span><span class='line'>
+</span><span class='line'>Done, without errors.</span></code></pre></td></tr></table></div></figure>
+
+
+<p>On voit que le fichier <code>Gruntfile.js</code> a été vérifié avec succès.</p>
+
+<h4>grunt-contrib-watch</h4>
+
+<p>Le plugin watch permet de déclencher des tâche lorsque des fichiers sont modifiés.</p>
+
+<p>Il s&#8217;installe de la manière suivante:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>% npm install grunt-contrib-watch --save-dev</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Et il se configure dans le Gruntfile suivant l&#8217;exemple ci-dessous :</p>
+
+<figure class='code'><figcaption><span>Gruntfile.js </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+</pre></td><td class='code'><pre><code class='js'><span class='line'><span class="nx">module</span><span class="p">.</span><span class="nx">exports</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">grunt</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>  <span class="s1">&#39;use strict&#39;</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="c1">// Project configuration.</span>
+</span><span class='line'>  <span class="nx">grunt</span><span class="p">.</span><span class="nx">initConfig</span><span class="p">({</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="nx">dirs</span><span class="o">:</span> <span class="p">{</span>
+</span><span class='line'>      <span class="nx">app</span><span class="o">:</span>     <span class="s1">&#39;app/&#39;</span><span class="p">,</span>
+</span><span class='line'>      <span class="nx">js</span><span class="o">:</span>      <span class="s1">&#39;app/js/&#39;</span><span class="p">,</span>
+</span><span class='line'>      <span class="nx">css</span><span class="o">:</span>     <span class="s1">&#39;app/css/&#39;</span><span class="p">,</span>
+</span><span class='line'>      <span class="kr">public</span><span class="o">:</span>  <span class="s1">&#39;public/&#39;</span>
+</span><span class='line'>    <span class="p">},</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="nx">files</span><span class="o">:</span> <span class="p">{</span>
+</span><span class='line'>      <span class="nx">all</span><span class="o">:</span> <span class="s1">&#39;**/*&#39;</span><span class="p">,</span>
+</span><span class='line'>      <span class="nx">js</span><span class="o">:</span>  <span class="s1">&#39;**/*.js&#39;</span><span class="p">,</span>
+</span><span class='line'>      <span class="nx">css</span><span class="o">:</span> <span class="s1">&#39;**/*.css&#39;</span><span class="p">,</span>
+</span><span class='line'>      <span class="nx">img</span><span class="o">:</span> <span class="s1">&#39;**/*.{png,gif,jpg,jpeg}&#39;</span>
+</span><span class='line'>    <span class="p">},</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="nx">watch</span><span class="o">:</span> <span class="p">{</span>
+</span><span class='line'>      <span class="nx">jshint</span><span class="o">:</span> <span class="p">{</span>
+</span><span class='line'>        <span class="nx">files</span><span class="o">:</span> <span class="p">[</span><span class="s1">&#39;&lt;%= dirs.js %&gt;&lt;%= files.js %&gt;&#39;</span><span class="p">,</span> <span class="s1">&#39;&lt;%= dirs.public %&gt;&lt;%= files.js %&gt;&#39;</span><span class="p">,</span> <span class="s1">&#39;Gruntfile.js&#39;</span><span class="p">],</span>
+</span><span class='line'>        <span class="nx">tasks</span><span class="o">:</span> <span class="s1">&#39;jshint&#39;</span>
+</span><span class='line'>      <span class="p">}</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="p">});</span>
+</span><span class='line'>
+</span><span class='line'>
+</span><span class='line'>  <span class="c1">// Load the plugin that provides the &quot;watch&quot; task.</span>
+</span><span class='line'>  <span class="nx">grunt</span><span class="p">.</span><span class="nx">loadNpmTasks</span><span class="p">(</span><span class="s1">&#39;grunt-contrib-watch&#39;</span><span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="c1">// Default task(s).</span>
+</span><span class='line'>  <span class="nx">grunt</span><span class="p">.</span><span class="nx">registerTask</span><span class="p">(</span><span class="s1">&#39;default&#39;</span><span class="p">,</span> <span class="p">[</span><span class="s1">&#39;watch:jshint&#39;</span><span class="p">]);</span>
+</span><span class='line'>
+</span><span class='line'><span class="p">};</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>On en profite pour ajouter 2 hash qui permettront ensuite de gagner du temps: <code>dirs</code> et <code>files</code> et qui définissent les répertoires et catégories de fichiers qui seront utilisés ensuite dans les tâches.
+Vous retrouvez les 2 lignes qui chargent le plugin (<code>grunt.loadNpmTasks(&lsquo;grunt-contrib-watch&rsquo;);</code>) et enregistrent votre tâche (<code>grunt.registerTask(&lsquo;default&rsquo;, [&lsquo;watch:jshint&rsquo;]);</code>)</p>
+
+<p>La configuration du pluging comporte une section qui défini la tâche à lancer <code>jshint</code> et quels sont les fichiers à surveiller.
+Dans notre cas, nous allons linter tous les fichiers js qui se trouvent dans les répertoires <code>js</code> et <code>public</code>, ainsi que le fichier <code>Gruntfile.js</code>.</p>
+
+<p>Il ne reste plus qu&#8217;à exécuter la tâche :</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>% grunt watch:jshint
+</span><span class='line'>Running "watch:jshint" (watch) task
+</span><span class='line'>Waiting...</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Encore un petit truc, si vous n&#8217;avez pas enregistré de tâche personnelles avec la propriété <code>registerTask</code>, vous pouvez toujours exécuter les tâches définies dans le <code>initConfig()</code>.</p>
+
+<p>Il ne nous reste plus qu&#8217;à provoquer un changement dans le fichier <code>Gruntfile.js</code> en supprimant un point-virgule en fin de ligne par exemple (ne pas oublier de sauver le fichier)</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>% grunt watch:jshint
+</span><span class='line'>Running "watch:jshint" (watch) task
+</span><span class='line'>Waiting...
+</span><span class='line'>
+</span><span class='line'>Reloading watch config...
+</span><span class='line'>
+</span><span class='line'>Running "watch:jshint" (watch) task
+</span><span class='line'>Waiting...
+</span><span class='line'>&gt;&gt; File "Gruntfile.js" changed.
+</span><span class='line'>Running "jshint:files" (jshint) task
+</span><span class='line'>
+</span><span class='line'>   Gruntfile.js
+</span><span class='line'>     47 |  })
+</span><span class='line'>             ^ Missing semicolon.
+</span><span class='line'>
+</span><span class='line'>&gt;&gt; 1 error in 1 file
+</span><span class='line'>Warning: Task "jshint:files" failed. Use --force to continue.
+</span><span class='line'>
+</span><span class='line'>Aborted due to warnings.
+</span><span class='line'>Completed in 0.946s at Sun Jul 06 2014 10:01:10 GMT+0200 (CEST) - Waiting...</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Si on corrige l&#8217;erreur:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>% grunt watch:jshint
+</span><span class='line'>Running "watch:jshint" (watch) task
+</span><span class='line'>Waiting...
+</span><span class='line'>
+</span><span class='line'>Reloading watch config...
+</span><span class='line'>
+</span><span class='line'>Running "watch:jshint" (watch) task
+</span><span class='line'>Waiting...
+</span><span class='line'>&gt;&gt; File "Gruntfile.js" changed.
+</span><span class='line'>Running "jshint:files" (jshint) task
+</span><span class='line'>
+</span><span class='line'>   Gruntfile.js
+</span><span class='line'>     47 |  })
+</span><span class='line'>             ^ Missing semicolon.
+</span><span class='line'>
+</span><span class='line'>&gt;&gt; 1 error in 1 file
+</span><span class='line'>Warning: Task "jshint:files" failed. Use --force to continue.
+</span><span class='line'>
+</span><span class='line'>Aborted due to warnings.
+</span><span class='line'>Completed in 0.946s at Sun Jul 06 2014 10:01:10 GMT+0200 (CEST) - Waiting...
+</span><span class='line'>
+</span><span class='line'>Reloading watch config...
+</span><span class='line'>
+</span><span class='line'>Running "watch:jshint" (watch) task
+</span><span class='line'>Waiting...
+</span><span class='line'>&gt;&gt; File "Gruntfile.js" changed.
+</span><span class='line'>Running "jshint:files" (jshint) task
+</span><span class='line'>&gt;&gt; 1 file lint free.
+</span><span class='line'>
+</span><span class='line'>Done, without errors.
+</span><span class='line'>Completed in 1.095s at Sun Jul 06 2014 10:02:58 GMT+0200 (CEST) - Waiting...</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Ouf, la catastrophe est évitée.</p>
+
+<h4>grunt-shell</h4>
+
+<p>Le dernier plugin que nous allons étudier est le plugin <code>grunt-shell</code>.
+Ce plugin permet d&#8217;exécuter des commandes système dans grunt.</p>
+
+<p>Dans notre exemple, nous allons créer une tâche qui réalise une commande <code>git log</code>.
+On pourra plus tard, réaliser un &ldquo;rsync&rdquo; pour déployer son application sur un serveur de préproduction.</p>
+
+<p>Vous connaissez la manipulation, on commence par installer le plugin:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>% npm install grunt-shell --save-dev</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Et on le configure dans le Gruntfile suivant l&#8217;exemple ci-dessous :</p>
+
+<figure class='code'><figcaption><span>Gruntfile.js </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+<span class='line-number'>39</span>
+<span class='line-number'>40</span>
+<span class='line-number'>41</span>
+<span class='line-number'>42</span>
+<span class='line-number'>43</span>
+<span class='line-number'>44</span>
+<span class='line-number'>45</span>
+<span class='line-number'>46</span>
+<span class='line-number'>47</span>
+<span class='line-number'>48</span>
+<span class='line-number'>49</span>
+<span class='line-number'>50</span>
+<span class='line-number'>51</span>
+<span class='line-number'>52</span>
+</pre></td><td class='code'><pre><code class='js'><span class='line'><span class="nx">module</span><span class="p">.</span><span class="nx">exports</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">grunt</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>  <span class="s1">&#39;use strict&#39;</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'>
+</span><span class='line'>  <span class="c1">// Shell logging function</span>
+</span><span class='line'>  <span class="kd">function</span> <span class="nx">logShell</span><span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">stdout</span><span class="p">,</span> <span class="nx">stderr</span><span class="p">,</span> <span class="nx">cb</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>    <span class="k">if</span> <span class="p">(</span><span class="nx">err</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>      <span class="nx">grunt</span><span class="p">.</span><span class="nx">log</span><span class="p">.</span><span class="nx">error</span><span class="p">(</span><span class="s1">&#39;Command failed on &#39;</span> <span class="o">+</span> <span class="k">new</span> <span class="nb">Date</span><span class="p">());</span>
+</span><span class='line'>    <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+</span><span class='line'>      <span class="nx">grunt</span><span class="p">.</span><span class="nx">log</span><span class="p">.</span><span class="nx">ok</span><span class="p">(</span><span class="s1">&#39;Command executed on &#39;</span> <span class="o">+</span> <span class="k">new</span> <span class="nb">Date</span><span class="p">());</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'>    <span class="nx">cb</span><span class="p">();</span>
+</span><span class='line'>  <span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="c1">// Project configuration.</span>
+</span><span class='line'>  <span class="nx">grunt</span><span class="p">.</span><span class="nx">initConfig</span><span class="p">({</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="nx">dirs</span><span class="o">:</span> <span class="p">{</span>
+</span><span class='line'>      <span class="nx">app</span><span class="o">:</span>     <span class="s1">&#39;app/&#39;</span><span class="p">,</span>
+</span><span class='line'>      <span class="nx">js</span><span class="o">:</span>      <span class="s1">&#39;app/js/&#39;</span><span class="p">,</span>
+</span><span class='line'>      <span class="nx">css</span><span class="o">:</span>     <span class="s1">&#39;app/css/&#39;</span><span class="p">,</span>
+</span><span class='line'>      <span class="kr">public</span><span class="o">:</span>  <span class="s1">&#39;public/&#39;</span>
+</span><span class='line'>    <span class="p">},</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="nx">files</span><span class="o">:</span> <span class="p">{</span>
+</span><span class='line'>      <span class="nx">all</span><span class="o">:</span> <span class="s1">&#39;**/*&#39;</span><span class="p">,</span>
+</span><span class='line'>      <span class="nx">js</span><span class="o">:</span>  <span class="s1">&#39;**/*.js&#39;</span><span class="p">,</span>
+</span><span class='line'>      <span class="nx">css</span><span class="o">:</span> <span class="s1">&#39;**/*.css&#39;</span><span class="p">,</span>
+</span><span class='line'>      <span class="nx">img</span><span class="o">:</span> <span class="s1">&#39;**/*.{png,gif,jpg,jpeg}&#39;</span>
+</span><span class='line'>    <span class="p">},</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="nx">shell</span><span class="o">:</span> <span class="p">{</span>
+</span><span class='line'>      <span class="nx">options</span><span class="o">:</span> <span class="p">{</span>
+</span><span class='line'>        <span class="nx">failOnError</span><span class="o">:</span> <span class="kc">true</span><span class="p">,</span>
+</span><span class='line'>        <span class="nx">callback</span><span class="o">:</span> <span class="nx">logShell</span><span class="p">,</span>
+</span><span class='line'>        <span class="nx">stdout</span><span class="o">:</span> <span class="kc">true</span><span class="p">,</span>
+</span><span class='line'>        <span class="nx">stderr</span><span class="o">:</span> <span class="kc">true</span>
+</span><span class='line'>      <span class="p">},</span>
+</span><span class='line'>      <span class="nx">gitlog</span><span class="o">:</span> <span class="p">{</span>
+</span><span class='line'>        <span class="nx">command</span><span class="o">:</span> <span class="s1">&#39;git log&#39;</span>
+</span><span class='line'>      <span class="p">}</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'>  <span class="p">});</span>
+</span><span class='line'>
+</span><span class='line'>
+</span><span class='line'>  <span class="c1">// Load the plugin that provides the &quot;shell&quot; task.</span>
+</span><span class='line'>  <span class="nx">grunt</span><span class="p">.</span><span class="nx">loadNpmTasks</span><span class="p">(</span><span class="s1">&#39;grunt-shell&#39;</span><span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="c1">// Default task(s).</span>
+</span><span class='line'>  <span class="nx">grunt</span><span class="p">.</span><span class="nx">registerTask</span><span class="p">(</span><span class="s1">&#39;default&#39;</span><span class="p">,</span> <span class="p">[</span><span class="s1">&#39;shell:gitlog&#39;</span><span class="p">]);</span>
+</span><span class='line'>
+</span><span class='line'><span class="p">};</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>La section de configuration de la tâche <ode>shell</code> contient 2 sous-sections.
+La première configure de manière générale le plugin. On remarque qu&#8217;il est possible d&#8217;appeler une callback (nous avons défini une fonction <code>logShell</code>) et d&#8217;activer les sorties standards stdout et stderr.
+Les sous-sections suivantes définissent les appels systèmes.</p>
+
+<p>Essayons :</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>% grunt shell:gitlog
+</span><span class='line'>Running "shell:gitlog" (shell) task
+</span><span class='line'>commit 8a797952e14d0e5301432fce2dca8d944e172f36
+</span><span class='line'>Author: Jean-Thierry BONHOMME &lt;jtbonhomme@gmail.com&gt;
+</span><span class='line'>Date:   Sat Jul 5 17:04:32 2014 +0200
+</span><span class='line'>
+</span><span class='line'>    Added jshint task
+</span><span class='line'>
+</span><span class='line'>commit 85fc208f8e2ee257a782d0787c4233d3167044a8
+</span><span class='line'>Author: Jean-Thierry BONHOMME &lt;jtbonhomme@gmail.com&gt;
+</span><span class='line'>Date:   Sat Jul 5 16:18:21 2014 +0200
+</span><span class='line'>
+</span><span class='line'>    Update article reference)
+</span><span class='line'>
+</span><span class='line'>commit 752d0c8b6cc74c6a98417d43e42ba486020aa4db
+</span><span class='line'>Author: Jean-Thierry BONHOMME &lt;jtbonhomme@gmail.com&gt;
+</span><span class='line'>Date:   Sat Jul 5 16:17:34 2014 +0200
+</span><span class='line'>
+</span><span class='line'>    First commit
+</span><span class='line'>
+</span><span class='line'>commit 4b6649ed0c838723565649c6fbc0189bec19c874
+</span><span class='line'>Author: Jean-Thierry BONHOMME &lt;jtbonhomme@gmail.com&gt;
+</span><span class='line'>Date:   Sat Jul 5 16:14:15 2014 +0200
+</span><span class='line'>
+</span><span class='line'>    Initial commit
+</span><span class='line'>&gt;&gt; Command executed on Sun Jul 06 2014 10:22:28 GMT+0200 (CEST)
+</span><span class='line'>
+</span><span class='line'>Done, without errors.</span></code></pre></td></tr></table></div></figure>
+
+
+<p>On est bien d&#8217;accord que c&#8217;est juste un exemple, et que cette tâche ne présente aucun intérêt pratique, il serait évidemment plus simple d&#8217;entrer la commande <code>% git log</code>&hellip;</p>
+
+<h2>Créer ses propres tâches</h2>
+
+<p>La <a href="http://gruntjs.com/creating-tasks">documentation grunt</a> détaille la manière de créer ses propres tâches.</p>
+
+<h4>Tâches personnalisées simples</h4>
+
+<p>Le plus simple pour créer une tâche est de la développer directement dans le Gruntfile :</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>grunt.registerTask('foo', 'My "foo" task.', function() {
+</span><span class='line'>  grunt.log.writeln('Execution de la tache "foo"');
+</span><span class='line'>});</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Puis appelez la directement :</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>% grunt foo
+</span><span class='line'>Running "foo" task
+</span><span class='line'>Execution de la tache "foo"
+</span><span class='line'>
+</span><span class='line'>Done, without errors.</span></code></pre></td></tr></table></div></figure>
+
+
+<p>C&#8217;est relativement pratique pour les scripts simple. Pour développer des tâches plus complexes, voici comment procéder.</p>
+
+<h4>Tâches personnalisées complexes</h4>
+
+<p>Les tâches personnalisées sont stockées dans un répertoire qui peut être chargé par grunt. Dans notre cas, nosu avons créé une tâche <code>hash</code> (merci <a href="https://github.com/jinroh">@jinroh</a>) qui calcul un hash md5 sur des fichiers.</p>
+
+<p>On modifie les Gruntfile comme suit:</p>
+
+<figure class='code'><figcaption><span>Gruntfile.js </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+<span class='line-number'>39</span>
+<span class='line-number'>40</span>
+<span class='line-number'>41</span>
+</pre></td><td class='code'><pre><code class='js'><span class='line'><span class="nx">module</span><span class="p">.</span><span class="nx">exports</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">grunt</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>  <span class="s1">&#39;use strict&#39;</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="nx">grunt</span><span class="p">.</span><span class="nx">loadTasks</span><span class="p">(</span><span class="s1">&#39;tasks&#39;</span><span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="c1">// Project configuration.</span>
+</span><span class='line'>  <span class="nx">grunt</span><span class="p">.</span><span class="nx">initConfig</span><span class="p">({</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="c1">// custom variables configuration</span>
+</span><span class='line'>    <span class="nx">dirs</span><span class="o">:</span> <span class="p">{</span>
+</span><span class='line'>      <span class="nx">app</span><span class="o">:</span>     <span class="s1">&#39;app/&#39;</span><span class="p">,</span>
+</span><span class='line'>      <span class="nx">js</span><span class="o">:</span>      <span class="s1">&#39;app/js/&#39;</span><span class="p">,</span>
+</span><span class='line'>      <span class="nx">css</span><span class="o">:</span>     <span class="s1">&#39;app/css/&#39;</span><span class="p">,</span>
+</span><span class='line'>      <span class="kr">public</span><span class="o">:</span>  <span class="s1">&#39;public/&#39;</span>
+</span><span class='line'>    <span class="p">},</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="nx">files</span><span class="o">:</span> <span class="p">{</span>
+</span><span class='line'>      <span class="nx">all</span><span class="o">:</span> <span class="s1">&#39;**/*&#39;</span><span class="p">,</span>
+</span><span class='line'>      <span class="nx">js</span><span class="o">:</span>  <span class="s1">&#39;**/*.js&#39;</span><span class="p">,</span>
+</span><span class='line'>      <span class="nx">css</span><span class="o">:</span> <span class="s1">&#39;**/*.css&#39;</span><span class="p">,</span>
+</span><span class='line'>      <span class="nx">img</span><span class="o">:</span> <span class="s1">&#39;**/*.{png,gif,jpg,jpeg}&#39;</span>
+</span><span class='line'>    <span class="p">},</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="nx">hash</span><span class="o">:</span> <span class="p">{</span>
+</span><span class='line'>      <span class="nx">options</span><span class="o">:</span> <span class="p">{</span>
+</span><span class='line'>        <span class="nx">prefix</span><span class="o">:</span> <span class="s1">&#39;./&#39;</span>
+</span><span class='line'>      <span class="p">},</span>
+</span><span class='line'>      <span class="nx">publics</span><span class="o">:</span> <span class="p">{</span>
+</span><span class='line'>        <span class="nx">src</span><span class="o">:</span> <span class="p">[</span>
+</span><span class='line'>          <span class="s1">&#39;Gruntfile.js&#39;</span>
+</span><span class='line'>          <span class="p">],</span>
+</span><span class='line'>        <span class="nx">dest</span><span class="o">:</span> <span class="s1">&#39;&lt;%= dirs.public %&gt;hash&#39;</span>
+</span><span class='line'>      <span class="p">}</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="p">});</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="c1">// Default task(s).</span>
+</span><span class='line'>  <span class="nx">grunt</span><span class="p">.</span><span class="nx">registerTask</span><span class="p">(</span><span class="s1">&#39;default&#39;</span><span class="p">,</span> <span class="p">[</span><span class="s1">&#39;watch&#39;</span><span class="p">]);</span>
+</span><span class='line'>
+</span><span class='line'><span class="p">};</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Puis on crée un répertoire <code>tasks</code> contenant un fichiers <code>hash.js</code>:</p>
+
+<figure class='code'><figcaption><span>tasks/hash.js </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+</pre></td><td class='code'><pre><code class='js'><span class='line'><span class="cm">/* jshint node:true */</span>
+</span><span class='line'>
+</span><span class='line'><span class="kd">var</span> <span class="nx">crypto</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;crypto&#39;</span><span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'><span class="nx">module</span><span class="p">.</span><span class="nx">exports</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">grunt</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>  <span class="s1">&#39;use strict&#39;</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="kd">function</span> <span class="nx">md5</span><span class="p">(</span><span class="nx">file</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>    <span class="kd">var</span> <span class="nx">data</span> <span class="o">=</span> <span class="nx">grunt</span><span class="p">.</span><span class="nx">file</span><span class="p">.</span><span class="nx">read</span><span class="p">(</span><span class="nx">file</span><span class="p">,</span> <span class="p">{</span> <span class="nx">encoding</span><span class="o">:</span> <span class="kc">null</span> <span class="p">});</span>
+</span><span class='line'>    <span class="k">return</span> <span class="nx">crypto</span><span class="p">.</span><span class="nx">createHash</span><span class="p">(</span><span class="s1">&#39;md5&#39;</span><span class="p">).</span><span class="nx">update</span><span class="p">(</span><span class="nx">data</span><span class="p">).</span><span class="nx">digest</span><span class="p">(</span><span class="s1">&#39;hex&#39;</span><span class="p">);</span>
+</span><span class='line'>  <span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="nx">grunt</span><span class="p">.</span><span class="nx">registerMultiTask</span><span class="p">(</span><span class="s1">&#39;hash&#39;</span><span class="p">,</span> <span class="s1">&#39;Create the hash file&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>    <span class="kd">var</span> <span class="nx">prefix</span> <span class="o">=</span> <span class="k">new</span> <span class="nb">RegExp</span><span class="p">(</span><span class="s1">&#39;^&#39;</span> <span class="o">+</span> <span class="k">this</span><span class="p">.</span><span class="nx">options</span><span class="p">().</span><span class="nx">prefix</span><span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="kd">var</span> <span class="nx">hashes</span> <span class="o">=</span> <span class="p">[];</span>
+</span><span class='line'>    <span class="kd">var</span> <span class="nx">maxlen</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="k">this</span><span class="p">.</span><span class="nx">files</span><span class="p">.</span><span class="nx">forEach</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">files</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>      <span class="nx">files</span><span class="p">.</span><span class="nx">src</span><span class="p">.</span><span class="nx">map</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">file</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>        <span class="kd">var</span> <span class="nx">name</span> <span class="o">=</span> <span class="nx">file</span><span class="p">.</span><span class="nx">replace</span><span class="p">(</span><span class="nx">prefix</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39;:&#39;</span><span class="p">;</span>
+</span><span class='line'>        <span class="nx">maxlen</span> <span class="o">=</span> <span class="nb">Math</span><span class="p">.</span><span class="nx">max</span><span class="p">(</span><span class="nx">maxlen</span><span class="p">,</span> <span class="nx">name</span><span class="p">.</span><span class="nx">length</span><span class="p">);</span>
+</span><span class='line'>        <span class="k">return</span> <span class="p">[</span><span class="nx">name</span><span class="p">,</span> <span class="nx">md5</span><span class="p">(</span><span class="nx">file</span><span class="p">)];</span>
+</span><span class='line'>      <span class="p">}).</span><span class="nx">forEach</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">data</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>        <span class="nx">hashes</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="nx">grunt</span><span class="p">.</span><span class="nx">log</span><span class="p">.</span><span class="nx">table</span><span class="p">([</span><span class="nx">maxlen</span> <span class="o">+</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">32</span><span class="p">],</span> <span class="nx">data</span><span class="p">));</span>
+</span><span class='line'>      <span class="p">});</span>
+</span><span class='line'>    <span class="p">});</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="nx">hashes</span> <span class="o">=</span> <span class="nx">hashes</span><span class="p">.</span><span class="nx">join</span><span class="p">(</span><span class="s1">&#39;\n&#39;</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39;\n&#39;</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="nx">grunt</span><span class="p">.</span><span class="nx">log</span><span class="p">.</span><span class="nx">writeln</span><span class="p">(</span><span class="nx">hashes</span><span class="p">);</span>
+</span><span class='line'>    <span class="nx">grunt</span><span class="p">.</span><span class="nx">log</span><span class="p">.</span><span class="nx">write</span><span class="p">(</span><span class="s1">&#39;Generating &#39;</span> <span class="o">+</span> <span class="k">this</span><span class="p">.</span><span class="nx">data</span><span class="p">.</span><span class="nx">dest</span><span class="p">.</span><span class="nx">cyan</span> <span class="o">+</span> <span class="s1">&#39;...&#39;</span><span class="p">);</span>
+</span><span class='line'>    <span class="nx">grunt</span><span class="p">.</span><span class="nx">file</span><span class="p">.</span><span class="nx">write</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">data</span><span class="p">.</span><span class="nx">dest</span><span class="p">,</span> <span class="nx">hashes</span><span class="p">);</span>
+</span><span class='line'>    <span class="nx">grunt</span><span class="p">.</span><span class="nx">log</span><span class="p">.</span><span class="nx">ok</span><span class="p">();</span>
+</span><span class='line'>  <span class="p">});</span>
+</span><span class='line'>
+</span><span class='line'><span class="p">};</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Il ne reste plus qu&#8217;à lancer la tâche :</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>% grunt hash
+</span><span class='line'>Running "hash:publics" (hash) task
+</span><span class='line'>Gruntfile.js:    7d0428cb4f97db4bed4ce04e21eac969
+</span><span class='line'>
+</span><span class='line'>Generating public/hash...OK
+</span><span class='line'>
+</span><span class='line'>Done, without errors.</span></code></pre></td></tr></table></div></figure>
+
+
+<h2>Conditions d&#8217;échec</h2>
+
+<p>Il faut noter que lorsqu&#8217;on défini une tâche comme une suite d&#8217;autres tâches, toute erreur sur une de ces tâches provoque l&#8217;arrêt de la tâche &lsquo;parente&rsquo;.</p>
+
+<p>Par exemple l&#8217;exécution de la suite de tâche ci-dessous va échouer lors de la 2ème tâche (ko2) sans exécuter la 3ème (ok3) :</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>grunt.registerTask('ok1', 'This task succeds', function() {
+</span><span class='line'>  grunt.log.writeln('Execution de la tache "ok1"');
+</span><span class='line'>  return true;
+</span><span class='line'>});
+</span><span class='line'>
+</span><span class='line'>grunt.registerTask('ko2', 'This task fails', function() {
+</span><span class='line'>  grunt.log.writeln('Execution de la tache "ko2"');
+</span><span class='line'>  return false;
+</span><span class='line'>});
+</span><span class='line'>
+</span><span class='line'>grunt.registerTask('ok3', 'This task succeds', function() {
+</span><span class='line'>  grunt.log.writeln('Execution de la tache "ok3"');
+</span><span class='line'>  return true;
+</span><span class='line'>});
+</span><span class='line'>
+</span><span class='line'>grunt.registerTask('ok-ko', ['ok1', 'ko2', 'ok3']);</span></code></pre></td></tr></table></div></figure>
+
+
+
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>% grunt ok-ko
+</span><span class='line'>Running "ok1" task
+</span><span class='line'>Execution de la tache "ok1"
+</span><span class='line'>
+</span><span class='line'>Running "ko2" task
+</span><span class='line'>Execution de la tache "ko2"
+</span><span class='line'>Warning: Task "ko2" failed. Use --force to continue.
+</span><span class='line'>
+</span><span class='line'>Aborted due to warnings.</span></code></pre></td></tr></table></div></figure>
+
+
+<p><img src="http://gruntjs.com/img/grunt-logo.svg" alt="" /></p>
+
+<p>Nous avons vu dans l&#8217;article précédent comment installer et configurer Grunt.
+Nous allons dans aujourd&#8217;hui utiliser des plugins pour aller plus loin et créer nos propres tâches.</p>
+
+<h2>Liens pour aller (encore) plus loin</h2>
+
+<ul>
+<li><a href="http://chrisawren.com/posts/Advanced-Grunt-tooling">Advanced Grunt Tooling</a></li>
+<li><a href="http://blog.gleitzman.com/post/73110295075/perfecting-your-grunt-workflow">Perfecting your Grunt Workflow</a></li>
+<li><a href="http://thanpol.as/grunt/Grunt-with-express-server-and-Livereload/">Grunt with express server and Livereload</a> : pour servir votre site en local et rafraîchir votre navigateur dès que le code change</li>
+</ul>
+
+
+<h1>Conclusion</h1>
+
+<p>Je vous conseille de jeter un oeil aux plugins qui permettent d&#8217;intégrer les framework de test dans grunt (<a href="https://github.com/kmiyashiro/grunt-mocha">grunt-mocha</a> par exemple) et qui permettent d&#8217;aller très loin dans l&#8217;automatisation des tâches (corvées ?) courantes.
+Vous pouvez aussi examiner le module <a href="http://gruntjs.com/project-scaffolding">grunt-init</a> qui permet d&#8217;initialiser des projets rapidement suivant des TEMPLATES prédéterminés.</p>
+
+<p>La communauté est très active autour de ce projet, vous trouverez surement le plugin qu&#8217;il vous faut !</p>
+
+<p>Enfin, pour supporter Grunt, vous pouvez d&#8217;ailleurs ajouter aux <code>README.md</code> de vos propres projets, la ligne</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>[![Built with Grunt](https://cdn.gruntjs.com/builtwith.png)](http://gruntjs.com/)</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Ce qui fera apparaître le badge suivant :</p>
+
+<p><a href="http://gruntjs.com/"><img src="https://cdn.gruntjs.com/builtwith.png" alt="Built with Grunt" /></a></p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2014/07/05/grunt-lautomatisation-facile-part-1/">Grunt: L&#8217;automatisation Facile (Part 1)</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-07-05T11:03:24+02:00" pubdate data-updated="true">Jul 5<sup>th</sup>, 2014</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p><img src="http://gruntjs.com/img/grunt-logo.svg" alt="" /></p>
+
+<p>La majorité des développeurs que je connais ont un point commun, une caractéristique qui les distinguent des autres professions.</p>
+
+<p>Ils sont paresseux.</p>
+
+<p>Loin d&#8217;être un défaut, cette paresse est encouragée car elle se traduit par une tendance à éviter les tâches répétitives et fasitidieuses, et libèrent du temps pour les activités plus productives (écriture de documentation et test &hellip; quoique &hellip;)</p>
+
+<p>Les outils qui permettent au développeur consciencieux d&#8217;en faire le moins possible foisonnent; générateurs de templates et boilerplates, snippets, gist et autres pastebin, et outils d&#8217;automatisation.</p>
+
+<p>C&#8217;est à cette dernière catégorie d&#8217;outils que nous allons nous intéresser et plus particulièrement au plus célèbre d&#8217;entre eux: <a href="http://gruntjs.com/">grunt</a>.</p>
+
+<blockquote><p>tous les codes source de cet article sont disponibles sous <a href="https://github.com/jtbonhomme/grunt-article">github</a></p></blockquote>
+
+<h1>A quoi ça sert ?</h1>
+
+<p>Grunt est un exécuteur de tâches qui peuvent être lancées unitairement, ou par groupes.</p>
+
+<p>Pour parler concrêtement, le travail quotidien d&#8217;un dev front consiste quasi continuellement à :</p>
+
+<ul>
+<li>développer ou modifier son code (ou celui du voisin)</li>
+<li>corriger les fautes de syntaxes qui ne correspondent pas aux règles de codage</li>
+<li>vider les répertoires de sortie où sont compilés ses fichiers</li>
+<li>compiler ses templates pour générer les fichiers html</li>
+<li>compiler et minifier ses fichiers html</li>
+<li>lancer ses tests unitaires (si si si, il paraît que ça se fait beaucoup)</li>
+<li>déployer son application</li>
+<li>rafraîchir son navigateur</li>
+</ul>
+
+
+<p>Et recommencer &hellip;</p>
+
+<p>Grunt permet d&#8217;automatiser la plupart de ces tâches (non, il n&#8217;écrira pas le code ou la doc pour vous, mais il peut néanmoins générer la documentation yuidoc par exemple)</p>
+
+<p>Si on ajoute à ça une communauté active qui propose un grand nombre de plugins pour vous faciliter la vie, pourquoi hésiter plus longtemps ?</p>
+
+<h1>Par quoi on commence ?</h1>
+
+<blockquote><p>PS: toutes les manipulations ci-dessous tournent sous MAC, avec nodejs et npm installés</p></blockquote>
+
+<p>Il faut d&#8217;abord installer grunt et l&#8217;outil de ligne de commande grunt-cli</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>% npm install -g grunt-cli</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Si à cette étape vous vous amusez à exécuter la commande grunt (ben, faites le, histoire de suivre un peu), vous risquez de voir ceci apparaître :</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>% grunt
+</span><span class='line'>grunt-cli: The grunt command line interface. (v0.1.9)
+</span><span class='line'>
+</span><span class='line'>Fatal error: Unable to find local grunt.
+</span><span class='line'>
+</span><span class='line'>If you're seeing this message, either a Gruntfile wasn't found or grunt
+</span><span class='line'>hasn't been installed locally to your project. For more information about
+</span><span class='line'>installing and configuring grunt, please see the Getting Started guide:
+</span><span class='line'>
+</span><span class='line'>http://gruntjs.com/getting-started</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Ce message indique que le moteur de grunt n&#8217;est pas installé, et que grunt utilise un fichier de configuration <code>Grunfile.js</code> décrivant l&#8217;ensemble des tâches que vous souhaitez le voir faire exécuter.</p>
+
+<h1>Configuration de grunt</h1>
+
+<p>Créez puis ouvrez les fichier suivant avec votre éditeur favori.</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>% touch Gruntfile.js package.json</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Nous allons tout d&#8217;abord installer le package node de grunt en utilisant le gestionnaire de packages de node.
+Commencez par éditer le fichier package.json.</p>
+
+<figure class='code'><figcaption><span>package.json </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+</pre></td><td class='code'><pre><code class='json'><span class='line'><span class="p">{</span>
+</span><span class='line'>  <span class="nt">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;grunt-article&quot;</span><span class="p">,</span>
+</span><span class='line'>  <span class="nt">&quot;private&quot;</span><span class="p">:</span> <span class="kc">false</span><span class="p">,</span>
+</span><span class='line'>  <span class="nt">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Grunt article source files&quot;</span><span class="p">,</span>
+</span><span class='line'>  <span class="nt">&quot;version&quot;</span><span class="p">:</span> <span class="s2">&quot;0.0.1&quot;</span><span class="p">,</span>
+</span><span class='line'>  <span class="nt">&quot;author&quot;</span><span class="p">:</span> <span class="p">{</span>
+</span><span class='line'>    <span class="nt">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;jtbonhomme&quot;</span>
+</span><span class='line'>  <span class="p">},</span>
+</span><span class='line'>  <span class="nt">&quot;devDependencies&quot;</span><span class="p">:</span> <span class="p">{</span>
+</span><span class='line'>    <span class="nt">&quot;grunt&quot;</span> <span class="p">:</span> <span class="s2">&quot;~0.4.5&quot;</span>
+</span><span class='line'>  <span class="p">}</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Sauvez et lancez la commande qui installe les dépendances node:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>npm install</span></code></pre></td></tr></table></div></figure>
+
+
+<p>A cette étape, vous devez pouvoir exécuter grunt (l&#8217;option -v pour verbose):</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>% grunt -v
+</span><span class='line'>Initializing
+</span><span class='line'>Command-line options: --verbose
+</span><span class='line'>
+</span><span class='line'>Reading "Gruntfile.js" Gruntfile...OK
+</span><span class='line'>
+</span><span class='line'>Registering Gruntfile tasks.
+</span><span class='line'>Loading "Gruntfile.js" tasks...OK
+</span><span class='line'>&gt;&gt; No tasks were registered or unregistered.
+</span><span class='line'>
+</span><span class='line'>No tasks specified, running default tasks.
+</span><span class='line'>Running tasks: default
+</span><span class='line'>Warning: Task "default" not found. Use --force to continue.
+</span><span class='line'>
+</span><span class='line'>Aborted due to warnings.</span></code></pre></td></tr></table></div></figure>
+
+
+<p>On voit que grunt cherche dans le fichier Gruntfile.js les tâches à enregistrer et, en l&#8217;absence d&#8217;indication complémentaire, essaie de lancer une tâche <code>default</code>, qu&#8217;il ne trouve pas parce que, pour ceux qui suivent, nous n&#8217;avons encore rien écrit dans Gruntfile.js.</p>
+
+<h1>La première tâche</h1>
+
+<p>Imaginons que nous compilons notre projet et que le résultat soit déposé dans un répertoire <code>public</code> et que nous souhaitons définir une tâche qui permette de vider le contenu de ce répertoire.</p>
+
+<p>Nous allons utiliser un des nombreux plugins de grunt : <code>grunt-contrib-clean</code></p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>% npm install grunt-contrib-clean --save-dev</span></code></pre></td></tr></table></div></figure>
+
+
+<blockquote><p>l&#8217;option &mdash;save-dev permet d&#8217;ajouter automatiquement la dépendance au fichier package.json</p></blockquote>
+
+<p>Editez le fichier Gruntfile.js pour ajouter le code suivant:</p>
+
+<figure class='code'><figcaption><span>Gruntfile.js </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+</pre></td><td class='code'><pre><code class='js'><span class='line'><span class="nx">module</span><span class="p">.</span><span class="nx">exports</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">grunt</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>  <span class="s1">&#39;use strict&#39;</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="c1">// Project configuration.</span>
+</span><span class='line'>  <span class="nx">grunt</span><span class="p">.</span><span class="nx">initConfig</span><span class="p">({</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="nx">clean</span><span class="o">:</span> <span class="p">{</span>
+</span><span class='line'>      <span class="nx">all</span><span class="o">:</span> <span class="p">[</span>
+</span><span class='line'>        <span class="s1">&#39;public&#39;</span>
+</span><span class='line'>      <span class="p">]</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'>  <span class="p">});</span>
+</span><span class='line'>
+</span><span class='line'>
+</span><span class='line'>  <span class="c1">// Load the plugin that provides the &quot;uglify&quot; task.</span>
+</span><span class='line'>  <span class="nx">grunt</span><span class="p">.</span><span class="nx">loadNpmTasks</span><span class="p">(</span><span class="s1">&#39;grunt-contrib-clean&#39;</span><span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="c1">// Default task(s).</span>
+</span><span class='line'>  <span class="nx">grunt</span><span class="p">.</span><span class="nx">registerTask</span><span class="p">(</span><span class="s1">&#39;default&#39;</span><span class="p">,</span> <span class="p">[</span><span class="s1">&#39;clean:all&#39;</span><span class="p">]);</span>
+</span><span class='line'>
+</span><span class='line'><span class="p">};</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Puis, créez un répertoire <code>public</code>, ajoutez-y un fichier <code>test</code> et lancez grunt:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>% mkdir public
+</span><span class='line'>% touch public/test
+</span><span class='line'>% ls
+</span><span class='line'>Gruntfile.js node_modules package.json public
+</span><span class='line'>% grunt
+</span><span class='line'>Running "clean:all" (clean) task
+</span><span class='line'>Cleaning public...OK
+</span><span class='line'>
+</span><span class='line'>Done, without errors.
+</span><span class='line'>% ls
+</span><span class='line'>Gruntfile.js node_modules package.json</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Le répertoire <code>public</code> et son contenu ont bien été supprimés.</p>
+
+<p>Nous avons créé notre première tâche grunt.</p>
+
+<p>Nous verrons dans le prochain article comment utiliser les plugins et créer nos propres tâches.</p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
