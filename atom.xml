@@ -4,7 +4,7 @@
   <title><![CDATA[]]></title>
   <link href="http://jtbonhomme.github.io/atom.xml" rel="self"/>
   <link href="http://jtbonhomme.github.io/"/>
-  <updated>2014-07-13T11:06:06+02:00</updated>
+  <updated>2014-07-13T11:36:32+02:00</updated>
   <id>http://jtbonhomme.github.io/</id>
   <author>
     <name><![CDATA[Jean-Thierry BONHOMME]]></name>
@@ -22,6 +22,8 @@
 
 <p>Nous avons vu dans l&#8217;article précédent <a href="http://jtbonhomme.github.io/blog/2014/07/05/grunt-lautomatisation-facile-part-1">Grunt: l&#8217;automatisation facile (part 1)</a> comment installer et configurer Grunt.
 Nous allons dans aujourd&#8217;hui utiliser des plugins pour aller plus loin et créer nos propres tâches.</p>
+
+<blockquote><p>tous les codes source de cet article sont disponibles sous <a href="https://github.com/jtbonhomme/grunt-article">github</a></p></blockquote>
 
 <h1>Les plugins</h1>
 
